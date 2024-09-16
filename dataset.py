@@ -16,7 +16,7 @@ class DatasetCreator:
         self.image_size = IMAGE_SIZE
         self.batch_size = BATCH_SIZE
 
-    def get_2classes_(self):
+    def __get_2classes(self):
         """Move file into 2 directories for get 2 classes from 5 classes"""
         subdirs = ["cigs", "pipes", "roll_cigs"]
         destination = os.path.join(self.data_dir, "smoking")
@@ -27,18 +27,18 @@ class DatasetCreator:
                 shutil.move(source, dest)
             os.removedirs(os.path.join(self.data_dir, dir))
 
-    def convert_file2jpeg_(self, file_name, dir):
+    def __convert_file2jpeg(self, file_name, dir):
         """Function for convert files to jpeg format"""
         if file_name.lower().endswith("webp") or file_name.lower().endswith("jpg"):
             img = Image.open(os.path.join(self.data_dir, dir, file_name)).convert("RGB")
             img.save(f"{os.path.join(self.data_dir, dir, file_name[:-4])}.jpeg", "JPEG")
             os.remove(os.path.join(self.data_dir, dir, file_name))
 
-    def get_labels_(self):
+    def __get_labels(self):
         """Function for get labels from dataset"""
         for dir in os.listdir(self.data_dir):
             for file in os.listdir(os.path.join(self.data_dir, dir)):
-                self.convert_file2jpeg_(file, dir)
+                self.__convert_file2jpeg(file, dir)
                 self.labels.append(dir)
         enc = LabelEncoder()
         self.labels = enc.fit_transform(self.labels)
@@ -64,6 +64,6 @@ class DatasetCreator:
         return train_ds, val_ds
 
     def preproccesing(self):
-        self.get_2classes_()
-        self.labels = self.get_labels_()
+        self.__get_2classes()
+        self.labels = self.__get_labels()
         return self.split_data()

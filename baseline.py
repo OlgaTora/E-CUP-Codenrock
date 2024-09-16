@@ -8,7 +8,6 @@ from const import IMAGE_SIZE
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
-
 if __name__ == "__main__":
     dataset = DatasetCreator()
     train_ds, val_ds = dataset.preproccesing()
